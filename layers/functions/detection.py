@@ -7,10 +7,8 @@ from __future__ import print_function
 import torch
 
 from ..bbox_utils import decode, nms
-from torch.autograd import Function
 
-
-class Detect(Function):
+class Detect:
     """At test time, Detect is the final layer of SSD.  Decode location preds,
     apply non-maximum suppression to location predictions based on conf
     scores and threshold to a top_k number of output predictions for both
@@ -68,5 +66,4 @@ class Detect(Function):
 
                 output[i, cl, :count] = torch.cat((scores[ids[:count]].unsqueeze(1),
                                                    boxes_[ids[:count]]), 1)
-
         return output
