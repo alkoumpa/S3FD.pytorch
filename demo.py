@@ -19,7 +19,6 @@ from PIL import Image
 
 from data.config import cfg
 from s3fd import build_s3fd
-from torch.autograd import Variable
 from utils.augmentations import to_chw_bgr
 
 
@@ -62,7 +61,7 @@ def detect(net, img_path, thresh):
     x -= cfg.img_mean
     x = x[[2, 1, 0], :, :]
 
-    x = Variable(torch.from_numpy(x).unsqueeze(0))
+    x = torch.from_numpy(x).unsqueeze(0)
     if use_cuda:
         x = x.cuda()
     t1 = time.time()

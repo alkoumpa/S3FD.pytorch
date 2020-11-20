@@ -9,7 +9,6 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
-from torch.autograd import Variable
 
 from layers import *
 from data.config import cfg
@@ -39,7 +38,7 @@ class S3FD(nn.Module):
         self.num_classes = num_classes
         '''
         self.priorbox = PriorBox(size,cfg)
-        self.priors = Variable(self.priorbox.forward(), volatile=True)
+        self.priors = self.priorbox.forward()
         '''
         # SSD network
         self.vgg = nn.ModuleList(base)
@@ -68,7 +67,7 @@ class S3FD(nn.Module):
         Return:
             Depending on phase:
             test:
-                Variable(tensor) of output class label predictions,
+                tensor of output class label predictions,
                 confidence score, and corresponding location predictions for
                 each object detected. Shape: [batch,topk,7]
 
@@ -142,7 +141,7 @@ class S3FD(nn.Module):
             features_maps += [feat]
 
         self.priorbox = PriorBox(size, features_maps, cfg)
-        self.priors = Variable(self.priorbox.forward(), volatile=True)
+        self.priors = self.priorbox.forward()
 
         loc = torch.cat([o.view(o.size(0), -1) for o in loc], 1)
         conf = torch.cat([o.view(o.size(0), -1) for o in conf], 1)
@@ -264,6 +263,6 @@ def build_s3fd(phase, num_classes=2):
 
 if __name__ == '__main__':
     net = build_s3fd('train', num_classes=2)
-    inputs = Variable(torch.randn(4, 3, 640, 640))
+    inputs = torch.randn(4, 3, 640, 640)
     output = net(inputs)
 

@@ -18,7 +18,6 @@ import numpy as np
 
 from data.config import cfg
 from s3fd import build_s3fd
-from torch.autograd import Variable
 from utils.augmentations import S3FDBasicTransform
 
 

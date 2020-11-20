@@ -9,7 +9,6 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 from torch.autograd import Function
-from torch.autograd import Variable
 
 
 
@@ -31,6 +30,3 @@ class L2Norm(nn.Module):
         x = torch.div(x,norm)
         out = self.weight.unsqueeze(0).unsqueeze(2).unsqueeze(3).expand_as(x) * x
         return out
-
-
-        

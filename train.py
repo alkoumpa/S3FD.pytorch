@@ -13,7 +13,6 @@ import torch.optim as optim
 import torch.nn.init as init
 import torch.utils.data as data
 import numpy as np
-from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
 
 from data.config import cfg
@@ -142,12 +141,8 @@ def train():
         losses = 0
         for batch_idx, (images, targets) in enumerate(train_loader):
             if args.cuda:
-                images = Variable(images.cuda())
-                targets = [Variable(ann.cuda(), volatile=True)
-                           for ann in targets]
-            else:
-                images = Variable(images)
-                targets = [Variable(ann, volatile=True) for ann in targets]
+                images = images.cuda()
+                targets = [ann.cuda() for ann in targets]
 
             if iteration in cfg.LR_STEPS:
                 step_index += 1
@@ -184,7 +179,7 @@ def train():
         if iteration == cfg.MAX_STEPS:
             break
 
-
+@torch.no_grad()
 def val(epoch):
     net.eval()
     loc_loss = 0
@@ -193,12 +188,8 @@ def val(epoch):
     t1 = time.time()
     for batch_idx, (images, targets) in enumerate(val_loader):
         if args.cuda:
-            images = Variable(images.cuda())
-            targets = [Variable(ann.cuda(), volatile=True)
-                       for ann in targets]
-        else:
-            images = Variable(images)
-            targets = [Variable(ann, volatile=True) for ann in targets]
+            images = images.cuda()
+            targets = [ann.cuda() for ann in targets]
 
         out = net(images)
         loss_l, loss_c = criterion(out, targets)
