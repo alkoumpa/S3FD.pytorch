@@ -14,7 +14,7 @@ class PriorBox(object):
     feature map.
     """
 
-    def __init__(self, input_size, feature_maps,cfg):
+    def __init__(self, input_size, feature_maps, cfg):
         super(PriorBox, self).__init__()
         self.imh = input_size[0]
         self.imw = input_size[1]
