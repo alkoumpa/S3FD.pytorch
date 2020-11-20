@@ -25,8 +25,8 @@ from utils.augmentations import to_chw_bgr
 parser = argparse.ArgumentParser(description='s3df demo')
 parser.add_argument('--save_dir', type=str, default='tmp/',
                     help='Directory for detect result')
-parser.add_argument('--model', type=str,
-                    default='weights/s3fd.pth', help='trained model')
+parser.add_argument('--ckpt', type=str,
+                    default='ckpts/s3fd.pth', help='trained checkpoint')
 parser.add_argument('--thresh', default=0.6, type=float,
                     help='Final confidence threshold')
 args = parser.parse_args()
@@ -93,7 +93,7 @@ def detect(net, img_path, thresh):
 
 if __name__ == '__main__':
     net = build_s3fd('test', cfg.NUM_CLASSES)
-    net.load_state_dict(torch.load(args.model))
+    net.load_state_dict(torch.load(args.ckpt))
     net.eval()
 
     if use_cuda:
